@@ -95,6 +95,10 @@ Java_com_wangzhumo_app_medium_widget_CustomSurfacePlayer_start(JNIEnv *env, jobj
     //8.1 alloc packet
     AVPacket *pAVPacket = av_packet_alloc();
 
+    //9.4 设置window的缓冲区
+    ANativeWindow_setBuffersGeometry(pNativeWindow,pCodecCtx->width,pCodecCtx->height,WINDOW_FORMAT_RGBA_8888);
+
+
     //8.2 read frame to packet by loop
     while(av_read_frame(pAvFormatCtx,pAVPacket) >=0){
         //8.3 send frame to packet
@@ -136,7 +140,8 @@ Java_com_wangzhumo_app_medium_widget_CustomSurfacePlayer_start(JNIEnv *env, jobj
         //9.3 缩放，转换
         sws_scale(pSwsCtx,pAvframe->data,pAvframe->linesize,0,pAvframe->height,dst_data,dst_line_addr);
 
-
+        //9.4 开启锁，赋值
+        ANativeWindow_lock(pNativeWindow,)
     }
 
 
