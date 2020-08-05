@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.e("MainActivity ","1 selectPic");
-                File video = new File(Environment.getExternalStorageDirectory(), "overwatch_echo.mp4");
+                File video = new File(getExternalFilesDir(""), "overwatch_echo.mp4");
                 Log.e("MainActivity ","2 path : " + video.getAbsolutePath());
                 surfacePlayer.setDataSource(video.getAbsolutePath());
             }
