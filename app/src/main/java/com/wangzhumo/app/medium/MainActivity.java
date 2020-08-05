@@ -46,15 +46,19 @@ public class MainActivity extends AppCompatActivity {
 //                Log.e("MainActivity ","1 selectPic");
 //            }
 //        });
-        findViewById(R.id.bt_video_start).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.e("MainActivity ","1 selectPic");
-                File video = new File(getExternalFilesDir(""), "overwatch_echo.mp4");
-                Log.e("MainActivity ","2 path : " + video.getAbsolutePath());
-                surfacePlayer.setDataSource(video.getAbsolutePath());
-            }
-        });
+//        findViewById(R.id.bt_video_start).setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                final File video = new File(getExternalFilesDir(""), "ow.mp4");
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        surfacePlayer.setDataSource(video.getAbsolutePath());
+//                    }
+//                });
+//
+//            }
+//        });
     }
 
     void selectPic()

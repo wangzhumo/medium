@@ -1,14 +1,17 @@
 #include <jni.h>
 #include <string>
-#include <android/native_window_jni.h>
-#include <android/log.h>
 
 extern "C" {
-#include <libavutil/avutil.h>
-#include <libavformat/avformat.h>
-#include <libswscale/swscale.h>
-#include <libavutil/imgutils.h>
+#include "libavutil/avutil.h"
+#include "libavformat/avformat.h"
+#include "libswscale/swscale.h"
+#include "libavutil/imgutils.h"
+#include <android/native_window_jni.h>
+#include <android/native_window.h>
 }
+
+#ifdef ANDROID
+#include <android/log.h>
 
 #define TAG "medium-jni" // 这个是自定义的LOG的标识
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,TAG ,__VA_ARGS__) // 定义LOGD类型
@@ -16,6 +19,10 @@ extern "C" {
 #define LOGW(...) __android_log_print(ANDROID_LOG_WARN,TAG ,__VA_ARGS__) // 定义LOGW类型
 #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,TAG ,__VA_ARGS__) // 定义LOGE类型
 #define LOGF(...) __android_log_print(ANDROID_LOG_FATAL,TAG ,__VA_ARGS__) // 定义LOGF类型
+
+#endif
+
+
 
 
 extern "C"
@@ -29,13 +36,10 @@ extern "C"
 JNIEXPORT void JNICALL
 Java_com_wangzhumo_app_medium_widget_CustomSurfacePlayer_start(JNIEnv *env, jobject thiz,
                                                                jstring file_path, jobject surface) {
-    const char *filePath = env->GetStringUTFChars(file_path, 0);
+    const char *filePath = env->GetStringUTFChars(file_path, NULL);
     int ret = -1;
 
-    LOGE("File path = %s",filePath);
-    // 创建windows
-    ANativeWindow *pNativeWindow = ANativeWindow_fromSurface(env, surface);
-
+    LOGD("File path = %s",filePath);
     // start ffmpeg.
     // init network
     avformat_network_init();
@@ -44,6 +48,7 @@ Java_com_wangzhumo_app_medium_widget_CustomSurfacePlayer_start(JNIEnv *env, jobj
     //1.alloc ctx
     AVFormatContext *pAvFormatCtx = avformat_alloc_context();   // alloc ctx
     AVDictionary *pAvDictionary = NULL;  // NULL
+
 
     //2.config prams
     // If *pAvDictionary is NULL
@@ -54,33 +59,52 @@ Java_com_wangzhumo_app_medium_widget_CustomSurfacePlayer_start(JNIEnv *env, jobj
     ret = avformat_open_input(&pAvFormatCtx, filePath, NULL, &pAvDictionary);
     if (ret) {
         LOGE("avformat_open_input ret = %d",ret);
+        LOGE("avformat_open_input error = %s",av_err2str(ret));
         return;
     }
 
     //4.find video strack
-    avformat_find_stream_info(pAvFormatCtx, NULL);
+    ret = avformat_find_stream_info(pAvFormatCtx, NULL);
+    if (ret < 0){
+        LOGE("Couldn't find stream information.");
+        return;
+    }
+
     int video_stream_index = -1;
     for (int i = 0; i < pAvFormatCtx->max_streams; i++) {
-        if (pAvFormatCtx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO) {
+        if (pAvFormatCtx->streams[i]->codecpar->codec_type == AVMEDIA_TYPE_VIDEO && video_stream_index < 0) {
             video_stream_index = i;
             break;
         }
     }
 
+    if (video_stream_index == -1) {
+        LOGE("Didn't find a video stream or audio steam.");
+        return ; // Didn't find a video stream
+    }
+    LOGD("find a video stream %d",video_stream_index);
+
     //5.get video params
-    AVCodecParameters *pVideoCodec = pAvFormatCtx->streams[video_stream_index]->codecpar;
+    AVCodecParameters *pVideoCodecParam = pAvFormatCtx->streams[video_stream_index]->codecpar;
 
     //6.get decodec & codec ctx
-    AVCodec *pCodec = avcodec_find_decoder(pVideoCodec->codec_id);
+    AVCodec *pCodec = avcodec_find_decoder(pVideoCodecParam->codec_id);
+    if (pCodec == nullptr) {
+        LOGE("Couldn't find Codec.\n");
+        return;
+    }
+    LOGD("get a video decoder");
+
     AVCodecContext *pCodecCtx = avcodec_alloc_context3(pCodec);
     //6.1 set params to codec ctx
-    avcodec_parameters_to_context(pCodecCtx, pVideoCodec);
+    avcodec_parameters_to_context(pCodecCtx, pVideoCodecParam);
 
     //7.open codec
-    avcodec_open2(pCodecCtx, pCodec, NULL);
-
-
-
+    ret = avcodec_open2(pCodecCtx, pCodec, NULL);
+    if (ret < 0) {
+        LOGE("Could not open codec.");
+        return; // Could not open codec
+    }
 
     //8. get media packet
     //8.5 prepare swscale , for scale
@@ -104,11 +128,25 @@ Java_com_wangzhumo_app_medium_widget_CustomSurfacePlayer_start(JNIEnv *env, jobj
     //8.1 alloc packet
     AVPacket *pAVPacket = av_packet_alloc();
 
-    //9.4 设置window的缓冲区
-    ANativeWindow_setBuffersGeometry(pNativeWindow, pCodecCtx->width, pCodecCtx->height,
+    //9.4 设置window & 缓冲区
+    // 获取native window
+    LOGD("require ANativeWindow instance ");
+    ANativeWindow *pNativeWindow = ANativeWindow_fromSurface(env, surface);
+    if (pNativeWindow == nullptr) {
+        LOGE("ANativeWindow_fromSurface == nullptr , error\n");
+        return;
+    }
+
+    int32_t result = ANativeWindow_setBuffersGeometry(pNativeWindow, pCodecCtx->width, pCodecCtx->height,
                                      WINDOW_FORMAT_RGBA_8888);
+    if (result != 0){
+        ANativeWindow_release(pNativeWindow);
+        LOGE("ANativeWindow_setBuffersGeometry error : %s ",av_err2str(result));
+        return;
+    }
     ANativeWindow_Buffer outBuffer;
 
+    LOGD("start play video");
     //8.2 read frame to packet by loop
     while (av_read_frame(pAvFormatCtx, pAVPacket) >= 0) {
         //8.3 send frame to packet

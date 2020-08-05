@@ -4,7 +4,7 @@ android {
     compileSdkVersion 30
     buildToolsVersion "30.0.1"
 
-    ndkVersion "20.1.5948944"
+    //ndkVersion "21.0.6113669'"
 
     defaultConfig {
         applicationId "com.wangzhumo.app.medium"
@@ -14,14 +14,14 @@ android {
         versionName "1.0"
 
         externalNativeBuild {
-            cmake {
-                cppFlags "-std=c++11 -frtti -fexceptions"
-                abiFilters 'armeabi-v7a'
-            }
-        }
+//            cmake {
+//                cppFlags "-std=c++11 -frtti -fexceptions"
+//                abiFilters 'armeabi-v7a'
+//            }
 
-        ndk{
-            abiFilters "armeabi-v7a"
+            ndk{
+                abiFilters "armeabi-v7a"
+            }
         }
 
 
@@ -31,14 +31,26 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+
+    sourceSets{
+        main{
+            jniLibs.srcDirs = ['src/libs']
+        }
+    }
+    
     externalNativeBuild {
         cmake {
-            path "src/main/cpp/CMakeLists.txt"
+            path "src/CMakeLists.txt"
             version "3.10.2"
         }
     }

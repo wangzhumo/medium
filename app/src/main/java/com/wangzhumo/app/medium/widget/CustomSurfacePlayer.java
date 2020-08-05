@@ -1,8 +1,11 @@
 package com.wangzhumo.app.medium.widget;
 
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+
+import java.io.File;
 
 import androidx.annotation.NonNull;
 
@@ -16,6 +19,12 @@ public class CustomSurfacePlayer implements SurfaceHolder.Callback {
      * load native code
      */
     static {
+        System.loadLibrary("avutil");
+        System.loadLibrary("swresample");
+        System.loadLibrary("avcodec");
+        System.loadLibrary("avformat");
+        System.loadLibrary("swscale");
+        System.loadLibrary("avfilter");
         System.loadLibrary("medium");
     }
 
@@ -48,11 +57,13 @@ public class CustomSurfacePlayer implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder) {
         this.surfaceHolder = surfaceHolder;
+        Log.e("CustomSurfacePlayer")
+        start("/storage/emulated/0/Android/data/com.wangzhumo.app.medium/files/ow.mp4",surfaceHolder.getSurface());
     }
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        this.surfaceHolder = surfaceHolder;
+
     }
 
     @Override
