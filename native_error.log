@@ -1,0 +1,38 @@
+# wangzhumo @ ubuntu in ~/Workspace/Medium on git:master o [9:49:08]
+$ /bin/bash  /home/wangzhumo/Workspace/Medium/ndk_crash_tool.sh
+********** Crash dump: **********
+Build fingerprint: 'Xiaomi/cepheus/cepheus:10/QKQ1.190825.002/V12.0.2.0.QFACNXM:user/release-keys'
+#00 0x00053854 /apex/com.android.runtime/lib/bionic/libc.so (__memcpy_base_aligned_a9+62) (BuildId: b1803e2c54cf63f48664b8839ccf313b)
+#01 0x00001473 /data/app/com.wangzhumo.app.medium-d99Q5rVJGMY3VkW9-LXFaw==/lib/arm/libmedium.so (Java_com_wangzhumo_app_medium_widget_CustomSurfacePlayer_start+1006) (BuildId: f69528bf6f93b0c0044851f870ac1efb7f3068bf)
+                                                                                                 Java_com_wangzhumo_app_medium_widget_CustomSurfacePlayer_start
+                                                                                                 /home/wangzhumo/Workspace/Medium/app/src/main/cpp/native-lib.cpp:206:13
+#02 0x000dc519 /apex/com.android.runtime/lib/libart.so (art_quick_generic_jni_trampoline+40) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#03 0x000d7bc5 /apex/com.android.runtime/lib/libart.so (art_quick_invoke_stub_internal+68) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#04 0x0043c97d /apex/com.android.runtime/lib/libart.so (art_quick_invoke_stub+248) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#05 0x000dff81 /apex/com.android.runtime/lib/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+168) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#06 0x00214663 /apex/com.android.runtime/lib/libart.so (art::interpreter::ArtInterpreterToCompiledCodeBridge(art::Thread*, art::ArtMethod*, art::ShadowFrame*, unsigned short, art::JValue*)+270) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#07 0x00210857 /apex/com.android.runtime/lib/libart.so (bool art::interpreter::DoCall<false, false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, art::JValue*)+738) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#08 0x00431cef /apex/com.android.runtime/lib/libart.so (MterpInvokeVirtual+594) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#09 0x000d2814 /apex/com.android.runtime/lib/libart.so (mterp_op_invoke_virtual+20) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#10 0x0001b314 [anon:dalvik-classes2.dex extracted in memory from /data/app/com.wangzhumo.app.medium-d99Q5rVJGMY3VkW9-LXFaw==/base.apk!classes2.dex] (com.wangzhumo.app.medium.widget.CustomSurfacePlayer.setDataSource+12)
+#11 0x00431f67 /apex/com.android.runtime/lib/libart.so (MterpInvokeVirtual+1226) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#12 0x000d2814 /apex/com.android.runtime/lib/libart.so (mterp_op_invoke_virtual+20) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#13 0x00019e88 [anon:dalvik-classes2.dex extracted in memory from /data/app/com.wangzhumo.app.medium-d99Q5rVJGMY3VkW9-LXFaw==/base.apk!classes2.dex] (com.wangzhumo.app.medium.MainActivity$1$1.run+28)
+#14 0x0043346d /apex/com.android.runtime/lib/libart.so (MterpInvokeInterface+1536) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#15 0x000d2a14 /apex/com.android.runtime/lib/libart.so (mterp_op_invoke_interface+20) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#16 0x000ea988 /apex/com.android.runtime/javalib/core-oj.jar (java.lang.Thread.run+8)
+#17 0x001f067f /apex/com.android.runtime/lib/libart.so (_ZN3art11interpreterL7ExecuteEPNS_6ThreadERKNS_20CodeItemDataAccessorERNS_11ShadowFrameENS_6JValueEbb.llvm.11541117213481018866+166) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#18 0x001f5093 /apex/com.android.runtime/lib/libart.so (art::interpreter::EnterInterpreterFromEntryPoint(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame*)+122) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#19 0x004263d7 /apex/com.android.runtime/lib/libart.so (artQuickToInterpreterBridge+866) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#20 0x000dc5a1 /apex/com.android.runtime/lib/libart.so (art_quick_to_interpreter_bridge+32) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#21 0x000d7bc5 /apex/com.android.runtime/lib/libart.so (art_quick_invoke_stub_internal+68) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#22 0x0043c97d /apex/com.android.runtime/lib/libart.so (art_quick_invoke_stub+248) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#23 0x000dff81 /apex/com.android.runtime/lib/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+168) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#24 0x0037cd47 /apex/com.android.runtime/lib/libart.so (art::(anonymous namespace)::InvokeWithArgArray(art::ScopedObjectAccessAlreadyRunnable const&, art::ArtMethod*, art::(anonymous namespace)::ArgArray*, art::JValue*, char const*)+54) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#25 0x0037dadb /apex/com.android.runtime/lib/libart.so (art::InvokeVirtualOrInterfaceWithJValues(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, jvalue const*)+302) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#26 0x003af73f /apex/com.android.runtime/lib/libart.so (art::Thread::CreateCallback(void*)+1018) (BuildId: 4ccf34966312973c1b448fc828a4458c)
+#27 0x000a1dbd /apex/com.android.runtime/lib/bionic/libc.so (__pthread_start(void*)+20) (BuildId: b1803e2c54cf63f48664b8839ccf313b)
+#28 0x000582a9 /apex/com.android.runtime/lib/bionic/libc.so (__start_thread+30) (BuildId: b1803e2c54cf63f48664b8839ccf313b)
+Crash dump is completed
+
+********** Crash dump: **********
