@@ -26,8 +26,6 @@ public class CustomSurfacePlayer implements SurfaceHolder.Callback {
     private SurfaceHolder surfaceHolder;
 
 
-
-
     /*
      * set surfaceView and callback
      */
@@ -41,7 +39,7 @@ public class CustomSurfacePlayer implements SurfaceHolder.Callback {
     }
 
     public void setDataSource(String filePath){
-
+        start(filePath,surfaceHolder.getSurface());
     }
 
     public native void start(String filePath, Surface surface);
