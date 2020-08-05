@@ -2,12 +2,14 @@ package com.wangzhumo.app.medium;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.SurfaceView;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -25,19 +27,20 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding mainBinding;
+    //private ActivityMainBinding mainBinding;
     private CustomSurfacePlayer surfacePlayer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mainBinding = ActivityMainBinding.inflate(this.getLayoutInflater());
+        //mainBinding = ActivityMainBinding.inflate(this.getLayoutInflater());
         setContentView(R.layout.activity_main);
-
+        SurfaceView surfaceView = findViewById(R.id.surfaceView);
         // create customSurfacePlayer
         surfacePlayer = new CustomSurfacePlayer();
         // set current surfaceView
-        surfacePlayer.setSurfaceView(mainBinding.surfaceView);
+        surfacePlayer.setSurfaceView(surfaceView);
 //        mainBinding.btVideoStart.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -46,19 +49,18 @@ public class MainActivity extends AppCompatActivity {
 //                Log.e("MainActivity ","1 selectPic");
 //            }
 //        });
-//        findViewById(R.id.bt_video_start).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                final File video = new File(getExternalFilesDir(""), "ow.mp4");
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        surfacePlayer.setDataSource(video.getAbsolutePath());
-//                    }
-//                });
-//
-//            }
-//        });
+        findViewById(R.id.bt_video_start).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final File video = new File(getExternalFilesDir(""), "ow.mp4");
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        surfacePlayer.setDataSource(video.getAbsolutePath());
+                    }
+                }).start();
+            }
+        });
     }
 
     void selectPic()

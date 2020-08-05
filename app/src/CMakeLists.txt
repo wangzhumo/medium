@@ -3,10 +3,10 @@ cmake_minimum_required(VERSION 3.4.1)
 project(medium)
 
 
-set(FFMPEG_DIR ${CMAKE_SOURCE_DIR}/libs)
+set(FFMPEG_DIR ${CMAKE_SOURCE_DIR}/jniLibs)
 # 设置FFmpeg头文件的路径
 # 因为和CMakeLists.txt在同一级，所以直接写include
-include_directories(${FFMPEG_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/main/cpp/include)
 
 add_library(
         medium
@@ -44,7 +44,7 @@ set_target_properties(swresample PROPERTIES IMPORTED_LOCATION
 # swscale
 add_library(swscale SHARED IMPORTED)
 set_target_properties(swscale PROPERTIES IMPORTED_LOCATION
-        ${CMAKE_SOURCE_DIR}/libs/${ANDROID_ABI}/libswscale.so)
+        ${FFMPEG_DIR}/${ANDROID_ABI}/libswscale.so)
 
 # ndk官方库
 find_library(log-lib log)

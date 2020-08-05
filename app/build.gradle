@@ -14,10 +14,10 @@ android {
         versionName "1.0"
 
         externalNativeBuild {
-//            cmake {
-//                cppFlags "-std=c++11 -frtti -fexceptions"
-//                abiFilters 'armeabi-v7a'
-//            }
+            cmake {
+                cppFlags "-std=c++11 -frtti -fexceptions"
+                abiFilters 'armeabi-v7a'
+            }
 
             ndk{
                 abiFilters "armeabi-v7a"
@@ -44,7 +44,7 @@ android {
 
     sourceSets{
         main{
-            jniLibs.srcDirs = ['src/libs']
+            jniLibs.srcDirs = ['src/jniLibs']
         }
     }
     
