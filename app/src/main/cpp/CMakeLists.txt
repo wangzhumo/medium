@@ -98,4 +98,7 @@ target_link_libraries(
         avformat
         swresample
         swscale
+        android   #添加到编译中，这个是系统的库
+        z         #ffmepg中 http 模块用到
+        OpenSLES  #ffmpeg用到
 )
