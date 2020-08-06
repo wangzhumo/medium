@@ -114,12 +114,22 @@ Java_com_wangzhumo_app_medium_widget_CustomSurfacePlayer_start(JNIEnv *env, jobj
     // 重视速度  fast_biliner,point
     // 重视质量  gauss,biliner
     // 重视锐度  cubic,spline,lanczos
+
+    int destWidth = pCodecCtx->width;
+    int destHeight = pCodecCtx->height;
+    // 1080
+//    if (destWidth > 1080){
+//        // 如果它大于1080，需要把他缩小
+//        float scale = 1080 / destWidth;
+//        destWidth = scale * destWidth;
+//        destHeight = scale * destHeight;
+//    }
     SwsContext *pSwsCtx = sws_getContext(
             pCodecCtx->width,
             pCodecCtx->height,
             pCodecCtx->pix_fmt,
-            pCodecCtx->width,
-            pCodecCtx->height,
+            destWidth,
+            destHeight,
             AV_PIX_FMT_RGBA,
             SWS_BILINEAR,      // codec 中间转换的模式 - 平衡
             0, 0, 0
@@ -210,5 +220,5 @@ Java_com_wangzhumo_app_medium_widget_CustomSurfacePlayer_start(JNIEnv *env, jobj
         ANativeWindow_unlockAndPost(pNativeWindow);
     }
 
-
+    ANativeWindow_release(pNativeWindow);
 }

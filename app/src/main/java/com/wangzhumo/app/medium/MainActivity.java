@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.bt_video_start).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final File video = new File(getExternalFilesDir(""), "ow.mp4");
+                final File video = new File(getExternalFilesDir(""), "0806.mp4");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
